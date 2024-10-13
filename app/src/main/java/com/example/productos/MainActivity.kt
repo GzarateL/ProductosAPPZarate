@@ -3,45 +3,44 @@ package com.example.productos
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.compose.rememberNavController
 import com.example.productos.ui.theme.ProductosTheme
+import com.example.productos.data.ProductoApiService
+import com.example.productos.data.CategoriaApiService
+import com.example.productos.view.SeriesApp
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 class MainActivity : ComponentActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
+
+        // Configurar Retrofit para conectar con tu API Django
+        val retrofit = Retrofit.Builder()
+            .baseUrl("http://192.168.0.6:8000/tienda/") // URL base de tu API Django con prefijo 'tienda/'
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+
+        // Crear instancias de los servicios de Producto y Categoría
+        val productoApiService = retrofit.create(ProductoApiService::class.java)
+        val categoriaApiService = retrofit.create(CategoriaApiService::class.java)
+
+        // Establecer el contenido con Jetpack Compose
         setContent {
             ProductosTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
+                // Recordar el controlador de navegación
+                val navController = rememberNavController()
+
+                // Llamar a SeriesApp para gestionar la navegación y las pantallas
+                SeriesApp(
+                    navController = navController,
+                    productoApiService = productoApiService,
+                    categoriaApiService = categoriaApiService
+                )
             }
         }
     }
 }
 
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    ProductosTheme {
-        Greeting("Android")
-    }
-}

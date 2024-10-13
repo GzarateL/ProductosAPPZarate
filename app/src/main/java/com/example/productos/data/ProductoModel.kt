@@ -10,10 +10,5 @@ data class ProductoModel(
     @SerializedName("pub_date") val pubDate: String,
     @SerializedName("imagen") val imagen: String?,
     @SerializedName("imagen_url") val imagenUrl: String?,
-    @SerializedName("categoria") val categoria: CategoriaModel
-)
-
-data class CategoriaModel(
-    @SerializedName("id") val id: Int,
-    @SerializedName("nombre") val nombre: String
+    @SerializedName("categoria") val categoria: Int?
 )

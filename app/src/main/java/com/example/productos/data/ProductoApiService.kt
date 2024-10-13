@@ -5,11 +5,11 @@ import retrofit2.http.*
 
 interface ProductoApiService {
 
-    // Obtener lista de productos
+    // Obtener todos los productos
     @GET("productos/")
     suspend fun getProductos(): List<ProductoModel>
 
-    // Obtener un solo producto por ID
+    // Obtener un solo producto
     @GET("productos/{id}/")
     suspend fun getProducto(@Path("id") id: Int): Response<ProductoModel>
 
